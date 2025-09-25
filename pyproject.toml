@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dirtviz-slack-bot"
+version = "0.0.1"
+authors = [
+  { name="John Madden", email="jmadden173@pm.me" },
+]
+description = "Slackbot to post updates from Dirtviz"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+dependencies = [
+  "slack_sdk",
+  "requests",
+  "pandas",
+]
+
+[project.optional-dependencies]
+dev = [
+  "black",
+  "ruff",
+]
+
+[project.scripts]
+dirtviz-slack-bot = "dirtviz_slack_bot.cli:entry"
+
+[project.urls]
+Homepage = ""
+Issues = ""
+
