@@ -1,8 +1,8 @@
-name: Deploy Dirtviz Slack Bot to Lambda
+name: Deploy Dirtviz Slack Bot (Code Only)
 
 on:
   push:
-    branches: [main] # deploy when main is updated
+    branches: [main] # Change if you want it to deploy from a different branch
 
 permissions:
   id-token: write
@@ -13,32 +13,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies and package
+      - name: Zip function code (no dependencies)
         run: |
-          pip install --target ./package -r requirements.txt
-          cd package
-          zip -r ../function.zip .
-          cd ..
-          zip -g function.zip lambda_function.py
-          zip -g function.zip -r src
-
-      - name: Test Lambda Handler
-        run: |
-          docker run --rm -v "$PWD":/var/task public.ecr.aws/lambda/python:3.11 lambda_function.lambda_handler
+          zip -r function.zip lambda_function.py src
 
       - name: Deploy to AWS Lambda
-        uses: appleboy/lambda-action@v1.2.0
+        uses: aws-actions/aws-cli@v2
         with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: us-west-1
-          function_name: dirtviz-slack-bot
-          zip_file: function.zip
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+          args: >
+            lambda update-function-code
+            --function-name DirtvizSlackBot
+            --zip-file fileb://function.zip
