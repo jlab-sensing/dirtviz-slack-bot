@@ -16,27 +16,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-west-2
+          python-version: '3.11'
 
-      - name: Build Lambda package in Amazon Linux container
+      - name: Install dependencies and package
         run: |
-          docker run --rm -v "$PWD":/var/task \
-            public.ecr.aws/lambda/python:3.11 \
-            /bin/bash -c "\
-              pip install -r requirements.txt -t /var/task/package && \
-              cp -r src/dirtviz_slack_bot /var/task/package/ && \
-              cp lambda_function.py /var/task/package/ && \
-              cd /var/task/package && \
-              zip -r ../function.zip . \
-            "
+          pip install --target ./package -r requirements.txt
+          cd package
+          zip -r ../function.zip .
+          cd ..
+          zip -g function.zip lambda_function.py
+          zip -g function.zip -r src
+
+      - name: Test Lambda Handler
+        run: |
+          docker run --rm -v "$PWD":/var/task public.ecr.aws/lambda/python:3.11 lambda_function.lambda_handler
 
       - name: Deploy to AWS Lambda
-        run: |
-          aws lambda update-function-code \
-            --function-name DirtvizSlackBot \
-            --zip-file fileb://function.zip
+        uses: appleboy/lambda-action@v1.2.0
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-west-1
+          function_name: dirtviz-slack-bot
+          zip_file: function.zip
