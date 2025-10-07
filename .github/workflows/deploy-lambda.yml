@@ -20,11 +20,15 @@ jobs:
         run: |
           zip -r function.zip lambda_function.py src
 
-      - name: Deploy to AWS Lambda
-        uses: appleboy/lambda-action@v0.2.0
+      - name: Set AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: us-west-1
-          function_name: DirtvizSlackBot
-          zip_file: function.zip
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+
+      - name: Deploy to Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name DirtvizSlackBot \
+            --zip-file fileb://function.zip
