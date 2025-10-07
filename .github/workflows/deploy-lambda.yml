@@ -27,8 +27,11 @@ jobs:
         run: |
           mkdir package
           docker run --rm -v "$PWD":/var/task --entrypoint /bin/bash \
-            public.ecr.aws/lambda/python:3.11 \
-            -c "pip install -r requirements.txt -t package/"
+          public.ecr.aws/lambda/python:3.11 \
+          -c "
+          pip install --upgrade pip &&
+          pip install --only-binary=:all: -r requirements.txt -t package/
+          "
 
       - name: Copy source code
         run: |
