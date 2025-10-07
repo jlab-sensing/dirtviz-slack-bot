@@ -5,8 +5,8 @@ on:
     branches: [main] # deploy when main is updated
 
 permissions:
-  id-token: write # This is required for OIDC authentication
-  contents: read # This is required to checkout the repository
+  id-token: write # required for OIDC authentication
+  contents: read # required to checkout the repository
 
 jobs:
   deploy:
@@ -23,15 +23,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-2
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
+      - name: Build dependencies in Amazon Linux container
         run: |
           mkdir package
-          pip install -r requirements.txt -t package/
+          docker run --rm -v "$PWD":/var/task public.ecr.aws/lambda/python:3.11 \
+            /bin/bash -c "pip install -r requirements.txt -t package/"
 
       - name: Copy source code
         run: |
