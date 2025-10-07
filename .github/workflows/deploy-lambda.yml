@@ -2,7 +2,11 @@ name: Deploy Dirtviz Slack Bot to Lambda
 
 on:
   push:
-    branches: [ main ]   # deploy when main is updated
+    branches: [main] # deploy when main is updated
+
+permissions:
+  id-token: write # This is required for OIDC authentication
+  contents: read # This is required to checkout the repository
 
 jobs:
   deploy:
@@ -33,7 +37,7 @@ jobs:
           zip -r ../function.zip .
 
       - name: Deploy to AWS Lambda
-        uses: aws-actions/aws-cli-action@v2
+        uses: aws-actions/aws-cli@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -42,4 +46,3 @@ jobs:
             lambda update-function-code \
               --function-name DirtvizSlackBot \
               --zip-file fileb://function.zip
-
