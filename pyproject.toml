@@ -20,6 +20,7 @@ dependencies = [
   "slack_sdk",
   "requests",
   "pandas",
+  "pyyaml",
 ]
 
 [project.optional-dependencies]

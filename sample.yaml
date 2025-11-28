@@ -1,0 +1,31 @@
+---
+
+# Channel to post in
+#channel: "#soil-power-students"
+channel: "#bot-test"
+
+# cell configurations
+groups:
+  - name: "Georgia Tech"
+    # start cell id
+    start: 1514
+    # end cell id
+    end: 1539
+    # explicit cells to exclude
+    exclude:
+      - 1520
+    # explicit cells to include
+    include:
+      - 1600
+
+  - name: "Northwestern"
+    # start cell id
+    start: 1514
+    # end cell id
+    end: 1539
+    # explicit cells to exclude
+    exclude:
+      - 1520
+    # explicit cells to include
+    include:
+      - 1600
