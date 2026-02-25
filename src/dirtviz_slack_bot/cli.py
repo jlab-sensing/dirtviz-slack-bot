@@ -17,7 +17,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 SLACK_TOKEN = ""
-CLIENT_ID = "#soil-power-students"
 
 
 class Group:
@@ -70,11 +69,6 @@ class Config:
         for g in self.data["groups"]:
             yield Group(g["name"], g["start"], g["end"], g["include"],
                         g["exclude"], g["bme280"])
-
-
-def post_hello_world(client: WebClient):
-    msg = "Hello, World!"
-    client.chat_postMessage(channel=CLIENT_ID, text=msg)
 
 
 def data_to_string(df, meas) -> str:
