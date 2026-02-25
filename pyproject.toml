@@ -19,7 +19,7 @@ classifiers = [
 dependencies = [
   "slack_sdk",
   "pyyaml",
-  "ents>=2.3.7"
+  "ents"
 ]
 
 [project.optional-dependencies]

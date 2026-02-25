@@ -7,6 +7,8 @@ channel: "#bot-test"
 # cell configurations
 groups:
   - name: "Georgia Tech"
+    # bme280 cell id
+    bme280: 1538
     # start cell id
     start: 1514
     # end cell id
