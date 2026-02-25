@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta
 from typing import Generator
 
@@ -16,7 +17,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-SLACK_TOKEN = ""
+SLACK_TOKEN = os.getenv("SLACK_TOKEN")
 
 
 class Group:
