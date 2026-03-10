@@ -239,7 +239,7 @@ def get_bme280_temp_str(backend: BackendClient, cell: int, start: datetime, end:
         Formatted measurement text.
     """
 
-    temp_df = backend.sensor_data_simple(cell, "BME280_TEMP", "Temperature", start, end)
+    temp_df = backend.sensor_data_simple(cell, "bme280", "Temperature", start, end)
 
     temp = data_to_string(temp_df, "Temperature")
 
@@ -262,7 +262,7 @@ def get_bme280_pressure_str(backend: BackendClient, cell, start: datetime, end: 
     """
 
     pressure_df = backend.sensor_data_simple(
-        cell, "BME280_PRESSURE", "Pressure", start, end
+        cell, "bme280", "Pressure", start, end
     )
 
     pressure = data_to_string(pressure_df, "Pressure")
@@ -289,7 +289,7 @@ def get_bme280_humidity_str(
     """
 
     humidity_df = backend.sensor_data_simple(
-        cell, "BME280_HUMIDITY", "Humidity", start, end
+        cell, "bme280", "Humidity", start, end
     )
 
     humidity = data_to_string(humidity_df, "Humidity")
